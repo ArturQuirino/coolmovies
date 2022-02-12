@@ -16,7 +16,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   React.useEffect(() => {
     const client = new ApolloClient({
       cache: new InMemoryCache(),
-      uri: '/graphql',
+      uri: 'http://localhost:5001/graphql',
     });
 
     const store = createStore({ epicDependencies: { client } });
@@ -27,9 +27,9 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
     <>
       <Head>
         <title>{'Coolmovies Frontend'}</title>
-        <meta charSet='UTF-8' />
-        <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <meta charSet="UTF-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <ReduxProvider store={store}>
         <Component {...pageProps} />
