@@ -2,12 +2,18 @@ import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import { useAppSelector } from '../../redux';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import ViewReview from '../../components/viewReview';
+import EditReview from '../../components/editReview';
 
 const ReviewPage: NextPage = () => {
   const reviewsState = useAppSelector((state) => state.reviews);
   const { query } = useRouter();
 
+  const [editMode, setEditMode] = useState(false);
+
   const [review, setReview] = useState({
+    id: '',
     body: '',
     movieByMovieId: {
       id: '1',
@@ -28,13 +34,34 @@ const ReviewPage: NextPage = () => {
     }
   });
 
+  const changeEditionMode = (isEditMode: boolean) => {
+    setEditMode(isEditMode);
+  };
+
+  const saveChanges = () => {
+    //save changes
+    changeEditionMode(false);
+  };
+
   return (
     <>
-      <h1>Review {review.title}</h1>
-      <div>
-        <h2>{review.title}</h2>
-        <p>{review.body}</p>
-      </div>
+      {editMode ? (
+        <EditReview review={review}></EditReview>
+      ) : (
+        <ViewReview review={review}></ViewReview>
+      )}
+
+      {!editMode && (
+        <Link href="/reviews">
+          <button>Back</button>
+        </Link>
+      )}
+
+      {editMode ? (
+        <button onClick={saveChanges}>Save</button>
+      ) : (
+        <button onClick={() => changeEditionMode(true)}>Edit</button>
+      )}
     </>
   );
 };
