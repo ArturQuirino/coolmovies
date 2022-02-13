@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
-import { useAppSelector } from '../../redux';
+import { reviewsActions, useAppDispatch, useAppSelector } from '../../redux';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import ViewReview from '../../components/viewReview';
 import EditReview from '../../components/editReview';
+import Review from '../../types/review';
 
 const ReviewPage: NextPage = () => {
   const reviewsState = useAppSelector((state) => state.reviews);
+  const dispatch = useAppDispatch();
+
   const { query } = useRouter();
 
   const [editMode, setEditMode] = useState(false);
@@ -38,15 +41,15 @@ const ReviewPage: NextPage = () => {
     setEditMode(isEditMode);
   };
 
-  const saveChanges = () => {
-    //save changes
+  const saveChanges = (editedReview: Review) => {
+    dispatch(reviewsActions.editReview({ review: editedReview }));
     changeEditionMode(false);
   };
 
   return (
     <>
       {editMode ? (
-        <EditReview review={review}></EditReview>
+        <EditReview review={review} saveChanges={saveChanges}></EditReview>
       ) : (
         <ViewReview review={review}></ViewReview>
       )}
@@ -57,9 +60,7 @@ const ReviewPage: NextPage = () => {
         </Link>
       )}
 
-      {editMode ? (
-        <button onClick={saveChanges}>Save</button>
-      ) : (
+      {!editMode && (
         <button onClick={() => changeEditionMode(true)}>Edit</button>
       )}
     </>

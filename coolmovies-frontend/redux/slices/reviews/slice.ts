@@ -21,6 +21,12 @@ export const slice = createSlice({
     ) => {
       state.reviews = action.payload.data.allMovieReviews.nodes;
     },
+    editReview: (state, action: PayloadAction<{ review: Review }>) => {
+      state.reviews = state.reviews.filter(
+        (r) => r.id !== action.payload.review.id
+      );
+      state.reviews.push(action.payload.review);
+    },
   },
 });
 
