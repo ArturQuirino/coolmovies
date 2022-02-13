@@ -25,6 +25,7 @@ const allMovieReviewsQuery = gql`
   query allMovieReviews {
     allMovieReviews {
       nodes {
+        id
         title
         body
         rating
